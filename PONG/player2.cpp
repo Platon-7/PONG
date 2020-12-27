@@ -1,29 +1,29 @@
 #pragma once
-#include "player.h"
+#include "player2.h"
 #include "graphics.h"
 
-void Player::update()
+void Player2::update()
 {
 
-	if (graphics::getKeyState(graphics::SCANCODE_A)) {
-		pos_x -= speed * graphics::getDeltaTime()/10.0f;
+	if (graphics::getKeyState(graphics::SCANCODE_LEFT)) {
+		pos_x -= speed * graphics::getDeltaTime() / 10.0f;
 	}
-	if (graphics::getKeyState(graphics::SCANCODE_D)) {
+	if (graphics::getKeyState(graphics::SCANCODE_RIGHT)) {
 		pos_x += speed * graphics::getDeltaTime() / 10.0f;
 	}
-	if (graphics::getKeyState(graphics::SCANCODE_W)) {
+	if (graphics::getKeyState(graphics::SCANCODE_UP)) {
 		pos_y -= speed * graphics::getDeltaTime() / 10.0f;
 	}
-	if (graphics::getKeyState(graphics::SCANCODE_S)) {
+	if (graphics::getKeyState(graphics::SCANCODE_DOWN)) {
 		pos_y += speed * graphics::getDeltaTime() / 10.0f;
 	}
-	if (pos_x < 0) pos_x = 0;// ftiaxno ta oria
-	if (pos_x > CANVAS_WIDTH/2-30) pos_x = CANVAS_WIDTH/2-30;
+	if (pos_x < CANVAS_WIDTH/2+30) pos_x = CANVAS_WIDTH/2+30;// ftiaxno ta oria
+	if (pos_x > CANVAS_WIDTH) pos_x = CANVAS_WIDTH;
 	if (pos_y > CANVAS_HEIGHT) pos_y = CANVAS_HEIGHT;
 	if (pos_y < 0) pos_y = 0;
 }
 
-void Player::draw()
+void Player2::draw()
 {
 	/*float glow = 0.5f + 0.5f * sinf(graphics::getGlobalTime()/10);// anabosbinei o player
 	graphics::Brush br;
@@ -61,6 +61,6 @@ void Player::draw()
 	graphics::drawRect(pos_x, pos_y, 5, 40, br);
 }
 
-void Player::init()
+void Player2::init()
 {
 }
