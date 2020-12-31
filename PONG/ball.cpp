@@ -52,7 +52,7 @@ void Ball::update()
 		play_collision_sound = true;
 	}
 	if (play_collision_sound) {
-		std::string wav= std::string(ASSET_PATH) + "hit1.wav";
+		std::string wav= std::string(ASSET_PATH) + "pong_hit_edited.wav";
 		graphics::playSound(wav, 0.5f);
 	}
 	ball_center_x += ball_direction_x * ball_speed;
@@ -63,9 +63,9 @@ void Ball::update()
 void Ball::drawBall()
 {
 	graphics::setOrientation(spinner_angle);
-	br.fill_color[0] = 1.0f;
-	br.fill_color[1] = 1.0f;
-	br.fill_color[2] = 1.0f;
+	br.fill_color[0] = 1.1f;
+	br.fill_color[1] = 1.1f;
+	br.fill_color[2] = 1.1f;
 	br.outline_opacity = 0.0f;
 	graphics::drawDisk(ball_center_x, ball_center_y, ball_radius, br);
 	graphics::resetPose();

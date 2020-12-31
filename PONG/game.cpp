@@ -75,14 +75,14 @@
 			char info[40];
 			sprintf_s(info, "%d", player1points);
 			sprintf_s(info, "%d", player2points);
-			graphics::drawText(CANVAS_WIDTH / 2 - 200, 75, 50, info, br);
-			graphics::drawText(CANVAS_WIDTH / 2 + 200, 75, 50, info, br);
+			graphics::drawText(CANVAS_WIDTH / 2 - 200, 100, 100, info, br);
+			graphics::drawText(CANVAS_WIDTH / 2 + 200, 100, 100, info, br);
 		}
 			
 	}
 	void Game::init()
 	{
-		graphics::setFont(std::string(ASSET_PATH) + "font3.ttf");
+		graphics::setFont(std::string(ASSET_PATH) + "Pong.otf");
 	}
 
 	Game::Game()
