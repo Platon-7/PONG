@@ -1,6 +1,8 @@
 #include "graphics.h"
 #include "game.h"
 #include "config.h"
+#include "vecmath.h"
+
 
 // The custom callback function that the library calls 
 // to check for and set the current application state.
@@ -19,14 +21,19 @@ void draw()
     game->draw();
 }
 
+
 int main()
 {
     Game mygame;// arxikopoiw ton constructor
     graphics::createWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "PONG");
 
+    //mygame.init();
+
     graphics::setUserData(&mygame);
+  
 
     graphics::setDrawFunction(draw);
+
     graphics::setUpdateFunction(update);
 
     graphics::setCanvasSize(CANVAS_WIDTH, CANVAS_HEIGHT);//kata simvasi theoro oti to shmeio "0" einai panw aristera ston kamva
@@ -34,6 +41,8 @@ int main()
 
     mygame.init();//an thelw
     graphics::startMessageLoop();
+    //graphics::destroyWindow();
 
     return 0;
+   
 }

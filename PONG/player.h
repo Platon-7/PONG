@@ -8,5 +8,7 @@ public:
 	void update() override;
 	void draw() override;
 	void init() override;
+	float getPosY() { return pos_y; }
+	float getPosX() { return pos_x; }
 	// ton paikth tha ton ksekinhsw sthn update
 };

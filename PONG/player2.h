@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "gameobject.h"
 #include "config.h"
 class Player2 : public GameObject { // ginetai kai xwris klhronomikothta thn proteinoyme omws
