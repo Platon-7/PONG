@@ -1,8 +1,9 @@
+#pragma once
 #include "gameobject.h"
 #include "config.h"
 #include "graphics.h"
 
-class Ball : public GameObject {
+class Ball : public GameObject, public Collidable {
 
 	graphics::Brush br;
 	/*float pos_x, pos_y;
@@ -21,21 +22,28 @@ class Ball : public GameObject {
 	float ball_direction_x;
 	float ball_direction_y;
 	float ball_radius = 4.0f;
+	float ball_future_center_y;
+	float ball_future_center_x;
+	bool play_collision_sound;
 
-	float ball_speed = 2.5f;
+	float ball_speed = 2.0f;
 
 	float spinner_angle = 0.0f;
+
 public:
 	void update() override;
 	void draw() override;
 	void init() override;
 	void drawScore();
 	void drawBall();
-	bool ballActive(){
+	void hit();
+	bool ballActive() {
 		return active;
 	}
-	Ball();
+	float getPosY() { return ball_center_y; }
+	float getPosX() { return ball_center_x; }
+	Disk getCollisionHull() const override;
+
+	Ball(const class Game& mygame);
 	~Ball();
 };
-
-

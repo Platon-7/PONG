@@ -8,7 +8,7 @@
 // to check for and set the current application state.
 void update(float ms)
 {
-    Game* game =  reinterpret_cast<Game *>(graphics::getUserData());// prepei na kanw cast gt sigkrinw Game me Void, ayto einai to stigmiotypo
+    Game* game = reinterpret_cast<Game*>(graphics::getUserData());// prepei na kanw cast gt sigkrinw Game me Void, ayto einai to stigmiotypo
     //kanonika tha eprepe na tsekarw an einai null pointer alla den xreiazetai gt ksero oti den einai, katw kanw setUserData akribws prin kalesw thn update
     game->update();
 }
@@ -30,7 +30,8 @@ int main()
     //mygame.init();
 
     graphics::setUserData(&mygame);
-  
+
+
 
     graphics::setDrawFunction(draw);
 
@@ -44,5 +45,5 @@ int main()
     //graphics::destroyWindow();
 
     return 0;
-   
+
 }

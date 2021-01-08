@@ -30,6 +30,12 @@
     <ClCompile Include="ball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gameobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">

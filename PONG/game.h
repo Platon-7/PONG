@@ -14,6 +14,9 @@ class Game
 	int player2points = 0;
 	void spawnBall();
 	void checkBall();
+	float pad_width = 5;
+	bool checkCollision();
+	void checkScore();
 public: 
 	void update();
 	void draw();
