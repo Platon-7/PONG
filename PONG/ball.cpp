@@ -14,7 +14,7 @@ void Ball::update()
 
 	ball_future_center_x = ball_center_x + ball_direction_x * ball_speed;
 	ball_future_center_y = ball_center_y + ball_direction_y * ball_speed;
-	play_collision_sound = false;
+
 
 	/*if ((ball_future_center_x + ball_radius) >= canvas_width) {
 		math::vec2 dir{ ball_direction_x, ball_direction_y };
@@ -39,7 +39,7 @@ void Ball::update()
 		math::vec2 reflection = math::reflect(dir, normal);
 		ball_direction_x = reflection.x;
 		ball_direction_y = reflection.y;
-		play_collision_sound = true;
+
 	}
 	else if ((ball_future_center_y - ball_radius) <= 0.0f) {
 		math::vec2 dir{ ball_direction_x, ball_direction_y };
@@ -47,12 +47,9 @@ void Ball::update()
 		math::vec2 reflection = math::reflect(dir, normal);
 		ball_direction_x = reflection.x;
 		ball_direction_y = reflection.y;
-		play_collision_sound = true;
+
 	}
-	if (play_collision_sound) {
-		std::string wav = std::string(ASSET_PATH) + "pong_hit_edited.wav";
-		graphics::playSound(wav, 0.5f);
-	}
+
 	ball_center_x += ball_direction_x * ball_speed;
 	ball_center_y += ball_direction_y * ball_speed;
 
@@ -80,6 +77,10 @@ void Ball::hit()
 		ball_direction_x = reflection.x;
 		ball_direction_y = reflection.y;
 		play_collision_sound = true;
+	}
+	if (play_collision_sound) {
+		std::string wav = std::string(ASSET_PATH) + "pong_hit_edited.wav";
+		graphics::playSound(wav, 0.5f);
 	}
 	ball_center_x += ball_direction_x * ball_speed;
 	ball_center_y += ball_direction_y * ball_speed;
@@ -163,18 +164,24 @@ void Ball::drawBall()
 
 void Ball::init()
 {
-
-
-	ball_center_x = CANVAS_HEIGHT - 50 + rand0to1();
-	ball_center_y = CANVAS_HEIGHT - 50 + rand0to1();//bgainei apo to kentro kai paei eite pros ta aristera eite pros ta deksia
-	ball_direction_x = rand0to1();
-	ball_direction_y = rand0to1();
-
+	if (myball == 0) {
+		ball_center_x = CANVAS_HEIGHT - 50 + rand0to1();
+		ball_center_y = CANVAS_HEIGHT - 50 + rand0to1();//bgainei apo to kentro kai paei eite pros ta aristera eite pros ta deksia
+		ball_direction_x = rand0to1();
+		ball_direction_y = rand0to1();
+	}
+	else {
+		ball_center_x = CANVAS_HEIGHT - 50 + rand0to1();
+		ball_center_y = CANVAS_HEIGHT - 50 + rand0to1();//bgainei apo to kentro kai paei eite pros ta aristera eite pros ta deksia
+		ball_direction_x = -1*rand0to1();
+		ball_direction_y = -1*rand0to1();
+	}
 
 	// Normalize
 	float length = std::sqrt(ball_direction_x * ball_direction_x + ball_direction_y * ball_direction_y);
 	ball_direction_x /= length;
 	ball_direction_y /= length;
+	myball++;
 }
 void Ball::draw()
 {

@@ -5,12 +5,13 @@
 #include "config.h"
 class Game 
 {
+	bool victory_sound = true;
 	graphics::Brush br;
 	bool end_game = false;
 	bool game_has_begun = false;
 	bool play_music = true;
 	typedef enum{STATUS_START, STATUS_PLAYING, STATUS_EXIT} status_t;//2 katastaseis
-	status_t status;// h metablhth status tha pairnei mia apo tis parapanw
+	status_t status = STATUS_START;// h metablhth status tha pairnei mia apo tis parapanw
 	Player * player = nullptr;
 	Player2 * player2 = nullptr;
 	bool player_initialized = false;

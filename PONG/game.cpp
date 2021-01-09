@@ -223,9 +223,19 @@ void Game::updatePlayingScreen() {
 	}
 }
 void Game::updateEndGame() {
-	if (graphics::getKeyState(graphics::SCANCODE_RETURN)) {
+	if (victory_sound) {
+		std::string wav = std::string(ASSET_PATH) + "tada.wav";
+		graphics::playSound(wav, 0.5f);
+		victory_sound = false;
+	}
+	if (graphics::getKeyState(graphics::SCANCODE_RETURN)) {// edw thelw na ksanarxisei to paixnidi giayto mhdenizw ta score kai sbhnw paiktes, to mpalaki einai hdh sbhsmeno giati gia na ertho edo mphke pontos
+		player = nullptr;
+		player2 = nullptr;
 		status = STATUS_PLAYING;
-		graphics::stopMusic();
+		player_initialized = false;
+		player2_initialized = false;
+		player1points = 0;
+		player2points = 0;
 		game_has_begun = true;
 	}
 	if (graphics::getKeyState(graphics::SCANCODE_ESCAPE)) {
@@ -240,7 +250,7 @@ void Game::draw()
 	if (status==STATUS_START) {
 		drawStartScreen();
 	}
-	else if(end_game){
+	else if(status==STATUS_EXIT){
 		drawEnd();
 	}
 	else {
@@ -248,16 +258,28 @@ void Game::draw()
 	}
 }
 void Game::drawEnd() {
+
+	char gameover[20];
+	sprintf_s(gameover, "GAME OVER ");
+	graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 150, 80, gameover, br);
+
 	if (player1points > player2points) {
 		char winner[40];
 		sprintf_s(winner, "The winner is: Player 1 ");
-		graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 75, 30, winner, br);
+		graphics::drawText(CANVAS_WIDTH / 2 - 150, CANVAS_HEIGHT / 2 - 30 , 50, winner, br);
 	}
 	else {
 		char winner[40];
-		sprintf_s(winner, "The winner is: Player 1 ");
-		graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 75, 30, winner, br);
+		sprintf_s(winner, "The winner is: Player 2 ");
+		graphics::drawText(CANVAS_WIDTH / 2 - 150, CANVAS_HEIGHT / 2 -30, 50, winner, br);
 	}
+	char output[40];
+	sprintf_s(output, "Press ENTER to play again ");
+	graphics::drawText(CANVAS_WIDTH / 2 - 75, CANVAS_HEIGHT / 2 + 75, 30, output, br);
+
+	char output2[40];
+	sprintf_s(output2, "Press ESCAPE to exit ");
+	graphics::drawText(CANVAS_WIDTH / 2 - 75, CANVAS_HEIGHT / 2 + 125, 30, output2, br);
 }
 void Game::drawStartScreen() {
 	graphics::Brush br;
