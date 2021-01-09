@@ -169,13 +169,6 @@ void Ball::init()
 	ball_center_y = CANVAS_HEIGHT - 50 + rand0to1();//bgainei apo to kentro kai paei eite pros ta aristera eite pros ta deksia
 	ball_direction_x = rand0to1();
 	ball_direction_y = rand0to1();
-	std::random_device seed;
-	std::default_random_engine generator(seed());
-	std::uniform_real_distribution<float> distribution(-1.0, 1.0);
-
-	ball_direction_x = distribution(generator);
-	ball_direction_y = distribution(generator);
-
 
 
 	// Normalize

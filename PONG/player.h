@@ -3,7 +3,7 @@
 #include "config.h"
 
 class Player : public GameObject, public Collidable3 { // ginetai kai xwris klhronomikothta thn proteinoyme omws
-	float speed = 2.0f;
+	float speed = 3.0f;
 	float pos_x = 50, pos_y = CANVAS_HEIGHT / 2;
 public:
 	Player(const class Game& mygame);

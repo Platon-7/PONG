@@ -44,7 +44,6 @@ bool Game::checkCollision()
 	Disk d1 = ball->getCollisionHull();
 
 	/*ta previous
-
 	float prev_testX1 = x;
 	float prev_testY1 = y;*/
 
@@ -63,7 +62,7 @@ bool Game::checkCollision()
 		prev_testY1 = prev_player_y - r1.rh/2;
 	else if (y > prev_player_y + r1.rh/2)
 		prev_testY1 = prev_player_y + r1.rh/2;
-		
+
 	float prev_distX1 = x - prev_testX1;
 	float prev_distY1 = y - prev_testY1;
 	float prev_distance = sqrt((prev_distX1 * prev_distX1) + (prev_distY1 * prev_distY1));*/
@@ -75,14 +74,14 @@ bool Game::checkCollision()
 	float rectangle_x = r1.rx - r1.rw / 2;
 	float rectangle_y = r1.ry - r1.rh / 2;
 
-	if (d1.cx < rectangle_x) 
+	if (d1.cx < rectangle_x)
 		testX1 = rectangle_x; //if ball is left
 	else if (d1.cx > rectangle_x + r1.rw)
 		testX1 = rectangle_x + r1.rw; //if ball is right
 	if (d1.cy < rectangle_y)
 		testY1 = rectangle_y;//if ball is above
 	else if (d1.cy > rectangle_y + r1.rh)
-		testY1 =  rectangle_y + r1.rh;// if ball is below
+		testY1 = rectangle_y + r1.rh;// if ball is below
 
 
 	float distX1 = d1.cx - testX1;
@@ -127,6 +126,42 @@ bool Game::checkCollision()
 
 void Game::update()
 {
+	if (status == STATUS_START) {
+		updateStartScreen();
+	}
+	else if(status == STATUS_EXIT){
+		updateEndGame();
+	}
+	else {
+		updatePlayingScreen();
+	}
+
+
+}
+void Game::updateStartScreen() {
+	if (play_music) {
+		std::string ogg = std::string(ASSET_PATH) + "intro.ogg";
+		graphics::playMusic(ogg, 0.5f,false,0);
+		play_music = false;
+	}
+	if (graphics::getKeyState(graphics::SCANCODE_RETURN)) {
+		status = STATUS_PLAYING;
+		graphics::stopMusic();
+		game_has_begun = true;
+	}
+	if (graphics::getKeyState(graphics::SCANCODE_ESCAPE)) {
+		graphics::stopMusic();
+		graphics::destroyWindow();
+		exit(0);
+	}
+
+}
+void Game::updatePlayingScreen() {
+	if (game_has_begun) {
+		std::string wav = std::string(ASSET_PATH) + "begin.wav";
+		graphics::playSound(wav, 0.5f);
+		game_has_begun = false;
+	}
 	if (!player_initialized)
 	{
 		player = new Player(*this);
@@ -142,6 +177,7 @@ void Game::update()
 
 	/*float prev_player_y = player->getPlayerPosY();//***an player=nullptr tha skasei*/
 	if (player2)
+
 		player2->update();
 
 	//checkBall();
@@ -152,12 +188,10 @@ void Game::update()
 		float prev_x = ball->getPosX();
 		float prev_y = ball->getPosY();
 		ball->update();
-
 		float cur_x = ball->getPosX();
 		float cur_y = ball->getPosY();
 		float dx = cur_x - prev_x;
 		float dy = cur_y - prev_y;
-
 		float len = dx * dx + dy * dy;
 		int N_tests = 5;
 		for (int i = 0; i < N_tests; i++) {
@@ -167,11 +201,7 @@ void Game::update()
 			if (checkCollision()) {
 				ball->hit();
 			}
-
 		}
-
-
-
 	}*/
 	if (ball) {
 		ball->update();
@@ -187,21 +217,74 @@ void Game::update()
 		ball = nullptr;
 
 	}
+	if (player1points == 3 || player2points == 3) {
+		status = STATUS_EXIT;
+		end_game = true;
+	}
+}
+void Game::updateEndGame() {
+	if (graphics::getKeyState(graphics::SCANCODE_RETURN)) {
+		status = STATUS_PLAYING;
+		graphics::stopMusic();
+		game_has_begun = true;
+	}
+	if (graphics::getKeyState(graphics::SCANCODE_ESCAPE)) {
+		graphics::stopMusic();
+		graphics::destroyWindow();
+		exit(0);
+	}
+}
+
+void Game::draw()
+{	
+	if (status==STATUS_START) {
+		drawStartScreen();
+	}
+	else if(end_game){
+		drawEnd();
+	}
+	else {
+		drawPlayingScreen();
+	}
+}
+void Game::drawEnd() {
+	if (player1points > player2points) {
+		char winner[40];
+		sprintf_s(winner, "The winner is: Player 1 ");
+		graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 75, 30, winner, br);
+	}
+	else {
+		char winner[40];
+		sprintf_s(winner, "The winner is: Player 1 ");
+		graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 75, 30, winner, br);
+	}
+}
+void Game::drawStartScreen() {
+	graphics::Brush br;
+
+	br.texture = std::string(ASSET_PATH) + "arcade.png";
+	graphics::drawRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_WIDTH, br);
+	br.texture = "";
+
+	char output[40];
+	sprintf_s(output, "Press ENTER to start: ");
+	graphics::drawText(CANVAS_WIDTH / 2-100, CANVAS_HEIGHT / 2-125, 30, output, br);
+
+	char output2[40];
+	sprintf_s(output2, "Press ESCAPE to exit: ");
+	graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 75, 30, output2, br);
+
 
 }
-void Game::draw()
-{
-
+void Game::drawPlayingScreen() {
 	graphics::Brush br;
-	br.texture = std::string(ASSET_PATH) + "pong_background.png";// to kanw convert apo c string se c++ string
-	//br.outline_opacity = 0.0f;// sbinei thn asprh grammh sto perigramma
 
-	//float offset = CANVAS_HEIGHT * sinf(graphics::getGlobalTime()/1000.0f)/4;//to bazw se sinimitono gia na palindromei kai na mh fugei h eikona kai den ksanagirisei
+	br.texture = std::string(ASSET_PATH) + "pong_background.png";// to kanw convert apo c string se c++ string
 
 	//draw background
 
 	graphics::drawRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_WIDTH, br);//	graphics::drawRect (float center_x, float center_y, float width, float height, const Brush &brush)
-	//bazw ksana CANVAS_WIDTH sto 4o orisma gia na mhn prosarmozw thn eikona sta thelw moy alla na thn afhnw, akoma kai na ksefigei apo th xwrhtikothta toy tamplo, an thelo na to prosarmosw bazw CANVAS_HEIGHT
+		//bazw ksana CANVAS_WIDTH sto 4o orisma gia na mhn prosarmozw thn eikona sta thelw moy alla na thn afhnw, akoma kai na ksefigei apo th xwrhtikothta toy tamplo, an thelo na to prosarmosw bazw CANVAS_HEIGHT
 
 	br.texture = "";
 	br.fill_color[0] = 1.0f;
@@ -227,9 +310,11 @@ void Game::draw()
 		graphics::drawText(CANVAS_WIDTH / 2 + 200, 100, 100, info_beta, br);
 	}
 
+
 }
 void Game::init()
 {
+
 	graphics::setFont(std::string(ASSET_PATH) + "Pong.otf");
 }
 
@@ -250,55 +335,3 @@ Game::~Game()
 	}
 
 }
-
-/*
-	Rectangle r1 = player->getCollisionRect();
-	//Line r2 = player2->getCollisionLine();
-	Disk d1 = ball->getCollisionHull();
-	//ta previous
-	float prev_testX1 = x;
-	float prev_testY1 = y;
-	// ta current
-	float testX1 = d1.cx;
-	float testY1 = d1.cy;
-	// first player previous
-	if (x < r1.rx) {
-		prev_testX1 = r1.rx;
-	}
-	else if (x > r1.rx + r1.rw) {
-		prev_testX1 = r1.rx + r1.rw;
-	}
-	if (y < prev_player_y)
-		prev_testY1 = prev_player_y;
-	else if (y > prev_player_y + r1.rh)
-		prev_testY1 = prev_player_y + r1.rh;
-	// first player current
-	if (d1.cx < r1.rx) {
-		testX1 = r1.rx;
-	}//if ball is left
-	else if (d1.cx > r1.rx + r1.rw){
-		testX1 = r1.rx + r1.rw;
-		}//if ball is right
-	if (d1.cy < r1.ry)
-		testY1 = r1.ry;//if ball is above
-	else if (d1.cy > r1.ry + r1.rh)
-		testY1 =  r1.ry + r1.rh;// if ball is below
-
-	//previous
-	float prev_distX1 = x - prev_testX1;
-	float prev_distY1 = y - prev_testY1;
-	float prev_distance = sqrt((prev_distX1 * prev_distX1) + (prev_distY1 * prev_distY1));
-	//current
-	float distX1 = d1.cx - testX1;
-	float distY1 = d1.cy - testY1;
-	float distance1 = sqrt((distX1 * distX1) + (distY1 * distY1));
-
-
-	if (distance1 <= d1.radius) {
-		return true;
-	}else if (prev_distance <= d1.radius && prev_distance>=d1.radius/2){
-			return true;
-		}
-	else {
-		return false;
-	}*/

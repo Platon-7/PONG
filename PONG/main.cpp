@@ -10,6 +10,7 @@ void update(float ms)
 {
     Game* game = reinterpret_cast<Game*>(graphics::getUserData());// prepei na kanw cast gt sigkrinw Game me Void, ayto einai to stigmiotypo
     //kanonika tha eprepe na tsekarw an einai null pointer alla den xreiazetai gt ksero oti den einai, katw kanw setUserData akribws prin kalesw thn update
+
     game->update();
 }
 
@@ -27,23 +28,19 @@ int main()
     Game mygame;// arxikopoiw ton constructor
     graphics::createWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "PONG");
 
-    //mygame.init();
 
     graphics::setUserData(&mygame);
-
-
 
     graphics::setDrawFunction(draw);
 
     graphics::setUpdateFunction(update);
 
-    graphics::setCanvasSize(CANVAS_WIDTH, CANVAS_HEIGHT);//kata simvasi theoro oti to shmeio "0" einai panw aristera ston kamva
+    graphics::setCanvasSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     graphics::setCanvasScaleMode(graphics::CANVAS_SCALE_FIT);
+
 
     mygame.init();//an thelw
     graphics::startMessageLoop();
     //graphics::destroyWindow();
-
-    return 0;
 
 }

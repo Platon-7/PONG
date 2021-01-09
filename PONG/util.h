@@ -1,12 +1,9 @@
 #pragma once
 #include <random>
+#include <iostream>
+
 float rand0to1();
 
-float randOper()
-{
-	char math_op = "+-"[rand() % 2];
-	return math_op;
-}
 
 struct Disk
 {
