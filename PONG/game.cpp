@@ -13,6 +13,11 @@ void Game::spawnBall()
 		ball = new Ball(*this);
 	}
 }
+void Game::spawnBarrier() {
+	if (!barrier) {
+		barrier = new Barrier(*this);
+	}
+}
 void Game::checkBall()
 {
 	if (!ball->ballActive()) {
@@ -26,13 +31,13 @@ void Game::checkScore()
 		if (ball->getPosX() >= CANVAS_WIDTH) {
 			player1points += 1;
 			std::string wav = std::string(ASSET_PATH) + "point.wav";
-			graphics::playSound(wav, 0.5f);
+			graphics::playSound(wav, 0.1f);
 
 		}
 		if (ball->getPosX() <= 0) {
 			player2points += 1;
 			std::string wav = std::string(ASSET_PATH) + "point.wav";
-			graphics::playSound(wav, 0.5f);
+			graphics::playSound(wav, 0.1f);
 		}
 	}
 }
@@ -141,7 +146,7 @@ void Game::update()
 void Game::updateStartScreen() {
 	if (play_music) {
 		std::string ogg = std::string(ASSET_PATH) + "intro.ogg";
-		graphics::playMusic(ogg, 0.5f,false,0);
+		graphics::playMusic(ogg, 0.1f,false,0);
 		play_music = false;
 	}
 	if (graphics::getKeyState(graphics::SCANCODE_RETURN)) {
@@ -159,7 +164,7 @@ void Game::updateStartScreen() {
 void Game::updatePlayingScreen() {
 	if (game_has_begun) {
 		std::string wav = std::string(ASSET_PATH) + "begin.wav";
-		graphics::playSound(wav, 0.5f);
+		graphics::playSound(wav, 0.1f);
 		game_has_begun = false;
 	}
 	if (!player_initialized)
@@ -175,37 +180,29 @@ void Game::updatePlayingScreen() {
 	if (player)
 		player->update();
 
-	/*float prev_player_y = player->getPlayerPosY();//***an player=nullptr tha skasei*/
 	if (player2)
 
 		player2->update();
 
-	//checkBall();
 
 	spawnBall();
 
-	/*if (ball) {
-		float prev_x = ball->getPosX();
-		float prev_y = ball->getPosY();
-		ball->update();
-		float cur_x = ball->getPosX();
-		float cur_y = ball->getPosY();
-		float dx = cur_x - prev_x;
-		float dy = cur_y - prev_y;
-		float len = dx * dx + dy * dy;
-		int N_tests = 5;
-		for (int i = 0; i < N_tests; i++) {
-			float s = (i + 0.5) / N_tests;
-			float x = s * (cur_x - prev_x) + prev_x;
-			float y = s * (cur_y - prev_y) + prev_y;
-			if (checkCollision()) {
-				ball->hit();
-			}
-		}
-	}*/
 	if (ball) {
 		ball->update();
 	}
+	if (graphics::getGlobalTime() > x) {
+		if (!barrier_here) {
+			spawnBarrier();
+			barrier_here = true;
+		}else{
+			delete barrier;
+			barrier = nullptr;
+			barrier_here = false;
+		}
+		x = x + 20000;
+	}
+	if (barrier)
+		barrier->update();
 	if (checkCollision()) {
 		ball->hit();
 	}
@@ -225,7 +222,7 @@ void Game::updatePlayingScreen() {
 void Game::updateEndGame() {
 	if (victory_sound) {
 		std::string wav = std::string(ASSET_PATH) + "tada.wav";
-		graphics::playSound(wav, 0.5f);
+		graphics::playSound(wav, 0.1f);
 		victory_sound = false;
 	}
 	if (graphics::getKeyState(graphics::SCANCODE_RETURN)) {// edw thelw na ksanarxisei to paixnidi giayto mhdenizw ta score kai sbhnw paiktes, to mpalaki einai hdh sbhsmeno giati gia na ertho edo mphke pontos
@@ -237,6 +234,7 @@ void Game::updateEndGame() {
 		player1points = 0;
 		player2points = 0;
 		game_has_begun = true;
+		victory_sound = true;
 	}
 	if (graphics::getKeyState(graphics::SCANCODE_ESCAPE)) {
 		graphics::stopMusic();
@@ -322,6 +320,8 @@ void Game::drawPlayingScreen() {
 
 	if (ball)
 		ball->draw();
+	if (barrier)
+		barrier->draw();
 	if (player)
 	{
 		char info[10];
@@ -354,6 +354,9 @@ Game::~Game()
 	}
 	if (ball) {
 		delete ball;
+	}
+	if (barrier) {
+		delete barrier;
 	}
 
 }

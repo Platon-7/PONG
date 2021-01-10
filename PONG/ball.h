@@ -7,10 +7,6 @@ class Ball : public GameObject, public Collidable {
 
 	int myball = 0;
 	graphics::Brush br;
-	/*float pos_x, pos_y;
-	float speed;
-	float size;
-	float rotation;*/
 	bool active = true;
 
 	int leftscore = 0;

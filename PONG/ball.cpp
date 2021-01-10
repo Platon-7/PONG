@@ -5,6 +5,10 @@
 #include <string>
 #include <vecmath.h>
 #include "game.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <cstdlib>
 
 void Ball::update()
 {
@@ -148,40 +152,36 @@ void Ball::drawBall()
 	graphics::drawDisk(ball_center_x, ball_center_y, ball_radius, br);
 	graphics::resetPose();
 
-	/*graphics::Brush brush;
-	brush.outline_opacity = 1.0f;
-	brush.texture = "";
-	brush.fill_color[0] = 0.3f;
-	brush.fill_color[1] = 1.0f;
-	brush.fill_color[2] = 0.3f;
-	brush.fill_opacity = 0.0f;
-	brush.gradient = false;
-	Disk hull = getCollisionHull();
-	graphics::drawDisk(hull.cx, hull.cy, hull.radius, brush);*/
+
 
 
 }
 
 void Ball::init()
 {
-	if (myball == 0) {
-		ball_center_x = CANVAS_HEIGHT - 50 + rand0to1();
-		ball_center_y = CANVAS_HEIGHT - 50 + rand0to1();//bgainei apo to kentro kai paei eite pros ta aristera eite pros ta deksia
-		ball_direction_x = rand0to1();
-		ball_direction_y = rand0to1();
-	}
-	else {
-		ball_center_x = CANVAS_HEIGHT - 50 + rand0to1();
-		ball_center_y = CANVAS_HEIGHT - 50 + rand0to1();//bgainei apo to kentro kai paei eite pros ta aristera eite pros ta deksia
-		ball_direction_x = -1*rand0to1();
-		ball_direction_y = -1*rand0to1();
-	}
+	int u = 0;
+	int min = 1;
+	int max = 249;
+	float r = rand0to1();
+	float value =  min + r * (max - min);
+	float result = randOper(CANVAS_HEIGHT/2, value);
+	ball_center_x = CANVAS_WIDTH/2;
+	ball_center_y = result; ///bgainei apo to kentro kai paei eite pros ta aristera eite pros ta deksia
+	while (u == 0) {
+		float local = randOper(0, 1);
+		ball_direction_x = local * rand0to1();
+		ball_direction_y = local * rand0to1();
+		// Normalize
+		float length = std::sqrt(ball_direction_x * ball_direction_x + ball_direction_y * ball_direction_y);
+		ball_direction_x /= length;
+		ball_direction_y /= length;
+		//ekstra elegxos
+		if (std::abs(ball_direction_y) - std::abs(ball_direction_x) <= 0.4) {
+			u++;
+		}
 
-	// Normalize
-	float length = std::sqrt(ball_direction_x * ball_direction_x + ball_direction_y * ball_direction_y);
-	ball_direction_x /= length;
-	ball_direction_y /= length;
-	myball++;
+		myball++;
+	}
 }
 void Ball::draw()
 {
@@ -196,16 +196,6 @@ Disk Ball::getCollisionHull() const
 	disk.cx = ball_center_x;
 	disk.cy = ball_center_y;
 	disk.radius = 4.0f;
-	/*if (abs(x - ball_center_x)>ball_radius/2) {
-		disk.cy = ball_future_center_y;
-		disk.cx = ball_future_center_x;
-	}
-	else {
-		float offset = (ball_future_center_x - x) / ball_direction_x;
-		disk.cy = ball_future_center_y - (ball_direction_y * offset);
-		disk.cx = x;
-		disk.radius = 4.0f;;
-	}*/
 	return disk;
 }
 

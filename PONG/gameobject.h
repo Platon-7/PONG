@@ -9,10 +9,6 @@ public:
 };
 class Collidable2 {
 public:
-	virtual Line getCollisionLine() const = 0;
-};
-class Collidable3 {
-public:
 	virtual Rectangle getCollisionRect() const = 0;
 };
 

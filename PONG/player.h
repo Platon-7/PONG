@@ -2,7 +2,7 @@
 #include "gameobject.h"
 #include "config.h"
 
-class Player : public GameObject, public Collidable3 { // ginetai kai xwris klhronomikothta thn proteinoyme omws
+class Player : public GameObject, public Collidable2 { // ginetai kai xwris klhronomikothta thn proteinoyme omws
 	float speed = 3.0f;
 	float pos_x = 50, pos_y = CANVAS_HEIGHT / 2;
 public:

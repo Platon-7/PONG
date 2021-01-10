@@ -3,8 +3,12 @@
 #include "player2.h"
 #include "ball.h"
 #include "config.h"
+#include "barrier.h"
 class Game 
 {
+	float x = 10000;
+	bool barrier_here = false;
+	Barrier * barrier = nullptr;
 	bool victory_sound = true;
 	graphics::Brush br;
 	bool end_game = false;
@@ -30,6 +34,13 @@ class Game
 	void drawStartScreen();
 	void drawPlayingScreen();
 	void drawEnd();
+	void spawnBarrier();
+	int score1() {
+		return player1points;
+	}
+	int score2() {
+		return player2points;
+	}
 public: 
 	void update();
 	void draw();
