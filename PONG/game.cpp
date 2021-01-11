@@ -9,26 +9,19 @@
 
 
 
-void Game::spawnBall()
+void Game::spawnBall()// an den yparxei mpala kane spawn
 {
 	if (!ball) {
 		ball = new Ball(*this);
 	}
 }
-void Game::spawnBarrier() {
+void Game::spawnBarrier() {// an den yparxei barrier kane spawn
 	if (!barrier) {
 		barrier = new Barrier(*this);
 	}
 }
-void Game::checkBall()
-{
-	if (!ball->ballActive()) {
-		delete ball;
-		ball = nullptr;
-	}
-}
 void Game::checkScore()
-{
+{// ayksanw to score gia toys paiktes an "mphke goal"
 	if (ball) {
 		if (ball->getPosX() >= CANVAS_WIDTH) {
 			player1points += 1;
@@ -43,8 +36,8 @@ void Game::checkScore()
 		}
 	}
 }
-bool Game::checkForBarrier(float prev_ball_x,float prev_ball_y) {
-	if (!ball || !barrier) {
+bool Game::checkForBarrier(float prev_ball_x,float prev_ball_y) {//an yparxei barrier elegxw an einai sthn troxia ths mpalas kai an prepei na ginei collision ginetai
+	if (!ball || !barrier) {// toy dinw san orisma tis prohgoymenes theseis giati yparxei periptwsh na ginei collision kai na mhn to antilhfthei logw update, etsi gyrnaw stis prohgoymenes
 		return false;
 	}
 	Disk d2 = ball->getCollisionHull();
@@ -55,10 +48,10 @@ bool Game::checkForBarrier(float prev_ball_x,float prev_ball_y) {
 
 	float dx = d2.cx - d3.cx;
 	float dy = d2.cy - d3.cy;
-	if (sqrt(dx * dx + dy * dy) <= d2.radius + d3.radius) {
+	if (sqrt(dx * dx + dy * dy) <= d2.radius + d3.radius) {// elegxos gia twra
 		return true;
 	}
-	else if (sqrt(dx_prev * dx_prev + dy_prev * dy_prev) <= d2.radius + d3.radius) {
+	else if (sqrt(dx_prev * dx_prev + dy_prev * dy_prev) <= d2.radius + d3.radius) {// elegxos gia thn prohgoymenh thesh
 		return true;
 	}
 	else
@@ -67,36 +60,12 @@ bool Game::checkForBarrier(float prev_ball_x,float prev_ball_y) {
 }
 
 bool Game::checkCollision()
-{
+{// elegxw pithano collision metaksy ths rectangle mparas kai toy ball, tha mporoyse na ginei kai me Line ball alla protimhsame to rectangle
 	Rectangle r1 = player->getCollisionRect();
 	Rectangle r2 = player2->getCollisionRect();
 	Disk d1 = ball->getCollisionHull();
 
-	/*ta previous
-	float prev_testX1 = x;
-	float prev_testY1 = y;*/
-
-	// ta current
-
-
-	// first player previous
-
-	/*if (x < r1.rx) {
-		prev_testX1 = r1.rx-r1.rw/2;
-	}
-	else if (x > r1.rx - r1.rw/2 + r1.rw ) {
-		prev_testX1 = r1.rx -r1.rw/2 + r1.rw;
-	}
-	if (y < prev_player_y - r1.rh/2)
-		prev_testY1 = prev_player_y - r1.rh/2;
-	else if (y > prev_player_y + r1.rh/2)
-		prev_testY1 = prev_player_y + r1.rh/2;
-
-	float prev_distX1 = x - prev_testX1;
-	float prev_distY1 = y - prev_testY1;
-	float prev_distance = sqrt((prev_distX1 * prev_distX1) + (prev_distY1 * prev_distY1));*/
-
-	// first player current
+	// gia ton aristero
 
 	float testX1 = d1.cx;
 	float testY1 = d1.cy;
@@ -117,7 +86,7 @@ bool Game::checkCollision()
 	float distY1 = d1.cy - testY1;
 	float distance1 = sqrt((distX1 * distX1) + (distY1 * distY1));
 
-	//current gia ton deytero paikth
+	// gia ton deksi paikth
 
 	float testX2 = d1.cx;
 	float testY2 = d1.cy;
@@ -139,14 +108,10 @@ bool Game::checkCollision()
 	float distance2 = sqrt((distX2 * distX2) + (distY2 * distY2));
 
 
-	if (distance1 <= d1.radius) {
+	if (distance1 <= d1.radius)// elegxos gia ton aristero
 		return true;
-	}
-	else if (distance2 <= d1.radius)
+	else if (distance2 <= d1.radius)// elegxos gia ton deksi
 		return true;
-	/*else if (prev_distance <= d1.radius && prev_distance>=d1.radius/2){
-			return true;
-		}*/
 	else {
 		return false;
 	}
@@ -154,7 +119,7 @@ bool Game::checkCollision()
 }
 
 void Game::update()
-{
+{// xwrizw thn update se 3 ypo-update mia gia kathe katastash
 	if (status == STATUS_START) {
 		updateStartScreen();
 	}
@@ -168,17 +133,17 @@ void Game::update()
 
 }
 void Game::updateStartScreen() {
-	if (play_music) {
+	if (play_music) {// anoigw to paixnidi kai arxizei h mousikh
 		std::string ogg = std::string(ASSET_PATH) + "intro.ogg";
 		graphics::playMusic(ogg, 0.1f,false,0);
 		play_music = false;
 	}
-	if (graphics::getKeyState(graphics::SCANCODE_RETURN)) {
-		status = STATUS_PLAYING;
-		graphics::stopMusic();
+	if (graphics::getKeyState(graphics::SCANCODE_RETURN)) {// an pathsei o paikths RETURN tote ksekinaei to paixnidi
+		status = STATUS_PLAYING;// allazw to status
+		graphics::stopMusic();// stamataw th mousikh
 		game_has_begun = true;
 	}
-	if (graphics::getKeyState(graphics::SCANCODE_ESCAPE)) {
+	if (graphics::getKeyState(graphics::SCANCODE_ESCAPE)) {// an pathsei o paikths ESCAPE termatizei
 		graphics::stopMusic();
 		graphics::destroyWindow();
 		exit(0);
@@ -186,7 +151,7 @@ void Game::updateStartScreen() {
 
 }
 void Game::updatePlayingScreen() {
-	if (game_has_begun) {
+	if (game_has_begun) {// hxos poy ypodeiknyei thn enarksh toy paixnidioy
 		std::string wav = std::string(ASSET_PATH) + "begin.wav";
 		graphics::playSound(wav, 0.1f);
 		game_has_begun = false;
@@ -205,77 +170,73 @@ void Game::updatePlayingScreen() {
 		player->update();
 
 	if (player2)
-
 		player2->update();
 
 
 	spawnBall();
-	float prev_ball_y = ball->getPosY();
+
+	float prev_ball_y = ball->getPosY();// krataw tis prohgoymenes theseis ths mpalas
 	float prev_ball_x = ball->getPosX();
 
 	if (ball) {
 		ball->update();
 	}
-	float curr_ball_y = ball->getPosY();
+	float curr_ball_y = ball->getPosY();// kai tis kainourgies twra poy egine update
 	float curr_ball_x = ball->getPosX();
 
-	if (graphics::getGlobalTime() > x) {
-		if (!barrier_here) {
+	if (graphics::getGlobalTime() > x) {// an exei perasei to xroniko diasthma x mpes edw
+		if (!barrier_here) {// an den yparxei barrier ftiakse ena
 			spawnBarrier();
 			barrier_here = true;
-		}else{
+		}else{// an yparxei katastrepse to
 			delete barrier;
 			barrier = nullptr;
 			barrier_here = false;
 		}
-		x = x + rangeRandom(10000, 20000);
+		x = x + rangeRandom(10000, 20000);// megalwse to x
 	}
-	if (barrier)
-		barrier->update();
 
-	int N_tests = 5;
-	/*float dx = cur_x - prev_x;
+	if (barrier) {// an yparxei barrier ypologise me bash to radius tou posous elegxous prepei na kaneis gia tis prohgoymenes theseis
+		float dx = curr_ball_x - prev_ball_x;
 
-	float dy = cur_y - prev_y;
+		float dy = curr_ball_y - prev_ball_y;
 
-	float len = dx * dx + dy * dy;
+		float len = dx * dx + dy * dy;
+		int N_tests = (int)ceil(len / barrier->getBarrierRadius() * barrier->getBarrierRadius());
+		for (int i = 0; i < N_tests; i++)
 
-	N_tests = (int)ceil(len / (barrier->radius * Pad_width));
-	*/
-	for (int i = 0; i < N_tests; i++)
+		{
+			float s = (i + 0.5f) / N_tests;
 
-	{
+			float x = s * (curr_ball_x - prev_ball_x) + prev_ball_x;
 
-		float s = (i + 0.5f) / N_tests;
+			float y = s * (curr_ball_y - prev_ball_y) + prev_ball_y;
 
-		float x = s * (curr_ball_x - prev_ball_x) + prev_ball_x;
-
-		float y = s * (curr_ball_y - prev_ball_y) + prev_ball_y;
-
-		if (checkForBarrier(x, y))
-			ball->hitBarrier();
+			if (checkForBarrier(x, y))
+				ball->hitBarrier();
+		}
 	}
-	/*if (checkForBarrier()) {
-		ball->hitBarrier();
-	}*/
-	if (checkCollision()) {
+
+	if (checkCollision()) {// an egine collision me kapoion apo tous paiktes kalese th hit
 		ball->hit();
 	}
-	int temp_player_1_points = player1points;
+	int temp_player_1_points = player1points;// prohgoymena score
 	int temp_player_2_points = player2points;
+
 	checkScore();
-	if (player1points != temp_player_1_points || player2points != temp_player_2_points) {
+
+	if (player1points != temp_player_1_points || player2points != temp_player_2_points) {// an ta twrina me ta prohgoymena score exoyn diafora tote mphke goal ara prepei na katastrepso thn mpala
 		delete ball;
 		ball = nullptr;
 
 	}
-	if (player1points == 3 || player2points == 3) {
+	if (player1points == 3 || player2points == 3) {// an opoiosdhpote apo tous 2 paiktes eftase to orio pontwn tote to paixnidi teleiwnei
 		status = STATUS_EXIT;
 		end_game = true;
 	}
 }
 void Game::updateEndGame() {
-	if (victory_sound) {
+	if (victory_sound) {// victory sound!
 		std::string wav = std::string(ASSET_PATH) + "tada.wav";
 		graphics::playSound(wav, 0.1f);
 		victory_sound = false;
@@ -285,7 +246,9 @@ void Game::updateEndGame() {
 		player = nullptr;
 		delete player2;
 		player2 = nullptr;
+		delete barrier;
 		barrier = nullptr;
+
 		status = STATUS_PLAYING;
 		player_initialized = false;
 		player2_initialized = false;
@@ -295,7 +258,7 @@ void Game::updateEndGame() {
 		game_has_begun = true;
 		victory_sound = true;
 	}
-	if (graphics::getKeyState(graphics::SCANCODE_ESCAPE)) {
+	if (graphics::getKeyState(graphics::SCANCODE_ESCAPE)) {// an o paikths den thelei na paiksei allo pataei ESCAPE kai to paixnidi lhgei
 		graphics::stopMusic();
 		graphics::destroyWindow();
 		exit(0);
@@ -314,32 +277,8 @@ void Game::draw()
 		drawPlayingScreen();
 	}
 }
-void Game::drawEnd() {
 
-	char gameover[20];
-	sprintf_s(gameover, "GAME OVER ");
-	graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 150, 80, gameover, br);
-
-	if (player1points > player2points) {
-		char winner[40];
-		sprintf_s(winner, "The winner is: Player 1 ");
-		graphics::drawText(CANVAS_WIDTH / 2 - 150, CANVAS_HEIGHT / 2 - 30 , 50, winner, br);
-	}
-	else {
-		char winner[40];
-		sprintf_s(winner, "The winner is: Player 2 ");
-		graphics::drawText(CANVAS_WIDTH / 2 - 150, CANVAS_HEIGHT / 2 -30, 50, winner, br);
-	}
-	char output[40];
-	sprintf_s(output, "Press ENTER to play again ");
-	graphics::drawText(CANVAS_WIDTH / 2 - 75, CANVAS_HEIGHT / 2 + 75, 30, output, br);
-
-	char output2[40];
-	sprintf_s(output2, "Press ESCAPE to exit ");
-	graphics::drawText(CANVAS_WIDTH / 2 - 75, CANVAS_HEIGHT / 2 + 125, 30, output2, br);
-}
-void Game::drawStartScreen() {
-	graphics::Brush br;
+void Game::drawStartScreen() {// draw to intro tou paixnidioy
 
 	br.texture = std::string(ASSET_PATH) + "arcade.png";
 	graphics::drawRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_WIDTH, br);
@@ -356,13 +295,12 @@ void Game::drawStartScreen() {
 
 }
 void Game::drawPlayingScreen() {
-	graphics::Brush br;
 
-	br.texture = std::string(ASSET_PATH) + "pong_background.png";// to kanw convert apo c string se c++ string
+	br.texture = std::string(ASSET_PATH) + "pong_background.png";
 
 	//draw background
 
-	graphics::drawRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_WIDTH, br);//	graphics::drawRect (float center_x, float center_y, float width, float height, const Brush &brush)
+	graphics::drawRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_WIDTH, br);
 		//bazw ksana CANVAS_WIDTH sto 4o orisma gia na mhn prosarmozw thn eikona sta thelw moy alla na thn afhnw, akoma kai na ksefigei apo th xwrhtikothta toy tamplo, an thelo na to prosarmosw bazw CANVAS_HEIGHT
 
 	br.texture = "";
@@ -379,9 +317,11 @@ void Game::drawPlayingScreen() {
 
 	if (ball)
 		ball->draw();
+
 	if (barrier)
 		barrier->draw();
-	if (player)
+
+	if (player && player2)// print tous pontous twn paiktwn
 	{
 		char info[10];
 		char info_beta[10];
@@ -393,10 +333,33 @@ void Game::drawPlayingScreen() {
 
 
 }
+void Game::drawEnd() {
+
+	char gameover[20];
+	sprintf_s(gameover, "GAME OVER ");
+	graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 150, 80, gameover, br);
+
+	if (player1points > player2points) {
+		char winner[40];
+		sprintf_s(winner, "The winner is: Player 1 ");
+		graphics::drawText(CANVAS_WIDTH / 2 - 150, CANVAS_HEIGHT / 2 - 30, 50, winner, br);
+	}
+	else {
+		char winner[40];
+		sprintf_s(winner, "The winner is: Player 2 ");
+		graphics::drawText(CANVAS_WIDTH / 2 - 150, CANVAS_HEIGHT / 2 - 30, 50, winner, br);
+	}
+	char output[40];
+	sprintf_s(output, "Press ENTER to play again ");
+	graphics::drawText(CANVAS_WIDTH / 2 - 75, CANVAS_HEIGHT / 2 + 75, 30, output, br);
+
+	char output2[40];
+	sprintf_s(output2, "Press ESCAPE to exit ");
+	graphics::drawText(CANVAS_WIDTH / 2 - 75, CANVAS_HEIGHT / 2 + 125, 30, output2, br);
+}
 void Game::init()
 {
-
-	graphics::setFont(std::string(ASSET_PATH) + "Pong.otf");
+	graphics::setFont(std::string(ASSET_PATH) + "Pong.otf");// to font gia to score 
 }
 
 Game::Game()
@@ -404,7 +367,7 @@ Game::Game()
 }
 
 Game::~Game()
-{// thimisoy, molis ftiakseis enan player prepei na ton katastrepseis kiolas
+{
 	if (player) {
 		delete player;
 	}

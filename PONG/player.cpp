@@ -11,14 +11,14 @@ Player::Player(const Game& mygame)
 void Player::update()
 {
 
-	if (graphics::getKeyState(graphics::SCANCODE_W)) {
+	if (graphics::getKeyState(graphics::SCANCODE_W)) {// bazw ton paikth na kineitai me ta koympia  W,S
 		pos_y -= speed * graphics::getDeltaTime() / 10.0f;
 	}
 	if (graphics::getKeyState(graphics::SCANCODE_S)) {
 		pos_y += speed * graphics::getDeltaTime() / 10.0f;
 	}
 
-	if (pos_y > CANVAS_HEIGHT-20) pos_y = CANVAS_HEIGHT-20;
+	if (pos_y > CANVAS_HEIGHT-20) pos_y = CANVAS_HEIGHT-20;// tou bazw oria
 	if (pos_y < 20) pos_y = 20;
 }
 
@@ -27,21 +27,12 @@ void Player::draw()
 
 	graphics::Brush br;
 	br.texture = "";
-	br.fill_color[0] = 1.0f;
+	br.fill_color[0] = 1.0f;//zwgrafizw ton paikth
 	br.fill_color[1] = 1.0f;
 	br.fill_color[2] = 1.0f;
 	br.fill_opacity = 1.0f;
 	graphics::drawRect(pos_x, pos_y, 5, 40, br);
 
-	br.outline_opacity = 1.0f;
-	br.texture = "";
-	br.fill_color[0] = 0.3f;
-	br.fill_color[1] = 1.0f;
-	br.fill_color[2] = 0.3f;
-	br.fill_opacity = 0.0f;
-	br.gradient = false;
-	Rectangle rect = getCollisionRect();
-	graphics::drawRect(rect.rx, rect.ry, rect.rw,rect.rh, br);
 }
 
 void Player::init()

@@ -4,8 +4,6 @@
 #include "vecmath.h"
 
 
-// The custom callback function that the library calls 
-// to check for and set the current application state.
 void update(float ms)
 {
     Game* game = reinterpret_cast<Game*>(graphics::getUserData());// prepei na kanw cast gt sigkrinw Game me Void, ayto einai to stigmiotypo
@@ -15,7 +13,6 @@ void update(float ms)
 }
 
 
-// The window content drawing function.
 void draw()
 {
     Game* game = reinterpret_cast<Game*>(graphics::getUserData());
@@ -39,8 +36,8 @@ int main()
     graphics::setCanvasScaleMode(graphics::CANVAS_SCALE_FIT);
 
 
-    mygame.init();//an thelw
+    mygame.init();
     graphics::startMessageLoop();
-    //graphics::destroyWindow();
+    graphics::destroyWindow();
 
 }

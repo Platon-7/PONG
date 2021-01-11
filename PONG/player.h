@@ -11,7 +11,7 @@ public:
 	void draw() override;
 	void init() override;
 	float getPlayerPosY() { return pos_x; }
-	float getPlayerPosX() { return pos_y; }
+	float getPlayerPosX() { return pos_y; }// pairnw th thesh toy paikth se kathe update
 	Rectangle getCollisionRect() const override;
 	// ton paikth tha ton ksekinhsw sthn update
 };

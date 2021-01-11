@@ -12,44 +12,23 @@
 
 void Ball::update()
 {
-	if (hits > x) {
+	if (hits > x) {// kathe 10 xtyphmata anebainei h taxythta
 		ball_speed = ball_speed * 1.5f;
 		x = x + 10;
 	}
 
+	ball_future_center_x = ball_center_x + ball_direction_x * ball_speed;// me bash thn taxythta thn kateythinsh kai to x ths mpalas ypologizw thn epomenh thesh x
+	ball_future_center_y = ball_center_y + ball_direction_y * ball_speed;// me bash thn taxythta thn kateythinsh kai to y ths mpalas ypologizw thn epomenh thesh y
 
-	spinner_angle++;
-
-	ball_future_center_x = ball_center_x + ball_direction_x * ball_speed;
-	ball_future_center_y = ball_center_y + ball_direction_y * ball_speed;
-
-
-	/*if ((ball_future_center_x + ball_radius) >= canvas_width) {
+	if ((ball_future_center_y + ball_radius) >= CANVAS_HEIGHT) {// an ftasei sto CANVAS_HEIGHT dld sto katw orio toy kamva tote kane reflect
 		math::vec2 dir{ ball_direction_x, ball_direction_y };
-		math::vec2 normal = { -1.0f, 0.0f };
-		math::vec2 reflection = math::reflect(dir, normal);
-		ball_direction_x = reflection.x;
-		ball_direction_y = reflection.y;
-		play_collision_sound = true;
-	}
-
-	if ((ball_future_center_x - ball_radius) <= 0.0f) {
-		math::vec2 dir{ ball_direction_x, ball_direction_y };
-		math::vec2 normal = { 1.0f, 0.0f };
-		math::vec2 reflection = math::reflect(dir, normal);
-		ball_direction_x = reflection.x;
-		ball_direction_y = reflection.y;
-		play_collision_sound = true;
-	}*/
-	if ((ball_future_center_y + ball_radius) >= canvas_height) {
-		math::vec2 dir{ ball_direction_x, ball_direction_y };
-		math::vec2 normal = { 0.0f, -1.0f };
-		math::vec2 reflection = math::reflect(dir, normal);
+		math::vec2 normal = { 0.0f, -1.0f };//h poreia poy tha parei h mpala meta thn kroush
+		math::vec2 reflection = math::reflect(dir, normal);// h kroush
 		ball_direction_x = reflection.x;
 		ball_direction_y = reflection.y;
 
 	}
-	else if ((ball_future_center_y - ball_radius) <= 0.0f) {
+	else if ((ball_future_center_y - ball_radius) <= 0.0f) {// an ftasei sto CANVAS_HEIGHT dld sto panw orio toy kamva tote kane reflect
 		math::vec2 dir{ ball_direction_x, ball_direction_y };
 		math::vec2 normal = { 0.0f, 1.0f };
 		math::vec2 reflection = math::reflect(dir, normal);
@@ -58,95 +37,66 @@ void Ball::update()
 
 	}
 
-	ball_center_x += ball_direction_x * ball_speed;
+	ball_center_x += ball_direction_x * ball_speed;// prosarmose analoga tis syntetagmenes ths mpalas
 	ball_center_y += ball_direction_y * ball_speed;
 
 }
 void Ball::hitBarrier()
 {
 
-	math::vec2 dir{ ball_direction_x, ball_direction_y };
+	math::vec2 dir{ ball_direction_x, ball_direction_y };//gia na mpo edo shmainei oti synanthsa empodio ara kane reflect
 	math::vec2 normal = { -1.0f, 0.0f };
 	math::vec2 reflection = math::reflect(dir, normal);
 	ball_direction_x = reflection.x;
 	ball_direction_y = reflection.y;
 	play_collision_sound = true;
 
-
+	ball_center_x += ball_direction_x * ball_speed;// enhmerwnw tis syntetagmenes
+	ball_center_y += ball_direction_y * ball_speed;
 
 }
 void Ball::hit()
 {
 
 
-	math::vec2 dir{ ball_direction_x, ball_direction_y };
+	math::vec2 dir{ ball_direction_x, ball_direction_y };// gia na mpo edo shmainei oti me petyxe enas apo toys dyo paiktes ara kane reflect
 	math::vec2 normal = { -1.0f, 0.0f };
 	math::vec2 reflection = math::reflect(dir, normal);
 	ball_direction_x = reflection.x;
 	ball_direction_y = reflection.y;
 	play_collision_sound = true;
 	hits++;
-	ball_center_x += ball_direction_x * ball_speed;
+
+	ball_center_x += ball_direction_x * ball_speed;// enhmerwnw tis syntetagmenes
 	ball_center_y += ball_direction_y * ball_speed; 
-
-	if (play_collision_sound) {
-		std::string wav = std::string(ASSET_PATH) + "pong_hit_edited.wav";
-		graphics::playSound(wav, 0.5f);
-	}
+	std::string wav = std::string(ASSET_PATH) + "pong_hit_edited.wav";
+	graphics::playSound(wav, 0.5f);
 
 
 
 }
 
-void Ball::drawBall()
-{
-	graphics::setOrientation(spinner_angle);
-	br.fill_color[0] = 1.1f;
-	br.fill_color[1] = 1.1f;
-	br.fill_color[2] = 1.1f;
-	//br.fill_opacity = 1.0f;
-	br.outline_opacity = 0.0f;
-	graphics::drawDisk(ball_center_x, ball_center_y, ball_radius, br);
-	graphics::resetPose();
-
-
-
-
-}
-void Ball::drawSpinner() {
-
-	graphics::Brush br;
-	br.fill_color[0] = 1.0f;
-	br.fill_color[1] = 0.0f;
-	br.fill_color[2] = 0.0f;
-	br.fill_opacity = 1.0f;
-
-	graphics::setOrientation(spinner_angle);
-	//graphics::drawSector(90, 10, 2, 5, 0, 90, br);
-	graphics::setOrientation(0);
-}
 
 
 void Ball::init()
 {
+	ball_radius = 4.0f;
+	ball_speed = 1.5f;
 	int u = 0;
 	int min = 1;
-	int max = 249;
-	float r = rand0to1();
-	float value =  min + r * (max - min);
-	float result = randOper(CANVAS_HEIGHT/2, value);
-	ball_center_x = CANVAS_WIDTH/2;
-	ball_center_y = result; ///bgainei apo to kentro kai paei eite pros ta aristera eite pros ta deksia
-	rangeRandom(ball_radius, CANVAS_HEIGHT - ball_radius);
+	int max = 499;
+	ball_center_x = CANVAS_WIDTH / 2;
+	ball_center_y = rangeRandom(min, max);// thelw h mpala na arxikopoieitai ston aksona X stathera alla na mporei na bgei apo opoiodhpote shmeio ston aksona Y
+
 	while (u == 0) {
 		float local = randOper(0, 1);
-		ball_direction_x = local * rand0to1();
+		ball_direction_x = local * rand0to1();//ftiaxno tyxaies kateuthinseis alla an den einai kales gia na einai to paixnidi eyxaristo ths ksanaorizw 
 		ball_direction_y = local * rand0to1();
 		// Normalize
 		float length = std::sqrt(ball_direction_x * ball_direction_x + ball_direction_y * ball_direction_y);
-		ball_direction_x /= length;
+		ball_direction_x /= length;// metatrepw se monada kamva tis syntetagmenes
 		ball_direction_y /= length;
-		//ekstra elegxos
+		//an h mpala arxikopoihthei etsi wste na paizei pio poly me tous parallhloys aksones para me tous kathetous tote na tis dothoyn ksana times
 		if (std::abs(ball_direction_y) - std::abs(ball_direction_x) <= 0.4) {
 			u++;
 		}
@@ -154,17 +104,22 @@ void Ball::init()
 }
 void Ball::draw()
 {
-	drawBall();
+	br.fill_color[0] = 1.1f;// kanw draw thn mpala, den xreiazomai texture einai apla enas aspros diskos
+	br.fill_color[1] = 1.1f;
+	br.fill_color[2] = 1.1f;
+	br.outline_opacity = 0.0f;
+	graphics::drawDisk(ball_center_x, ball_center_y, ball_radius, br);
+	//graphics::resetPose();
 
 }
 
 
 Disk Ball::getCollisionHull() const
 {
-	Disk disk;
+	Disk disk;// to collision hull poy me bohthaei stis krouseis me barrier kai paiktes
 	disk.cx = ball_center_x;
 	disk.cy = ball_center_y;
-	disk.radius = 4.0f;
+	disk.radius = ball_radius;
 	return disk;
 }
 
@@ -172,8 +127,9 @@ Disk Ball::getCollisionHull() const
 Ball::Ball(const Game& mygame)
 	: GameObject(mygame)
 {
-	init();
+	init();// kalw amesws thn init otan ftiakso ena antikeimeno typoy Ball
 }
+
 Ball::~Ball()
 {
 

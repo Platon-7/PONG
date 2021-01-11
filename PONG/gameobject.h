@@ -1,19 +1,19 @@
 #pragma once
 #include "util.h"
 
-class Collidable
+class Collidable// collidable gia tous diskous
 {
 public:
 	virtual Disk getCollisionHull() const = 0;
 
 };
-class Collidable2 {
+class Collidable2 {// collidable gia ta rectangle
 public:
 	virtual Rectangle getCollisionRect() const = 0;
 };
 
 
-class GameObject {
+class GameObject {// gameobject h klash poy thn klhronomoyn sxedon oles oi alles klaseis px ball,barrier,player klp
 protected:
 	const class Game& game;
 public:
