@@ -41,6 +41,7 @@ class Game
 	int score2() {
 		return player2points;
 	}
+	bool checkForBarrier(float prev_ball_y,float prev_ball_x);
 public: 
 	void update();
 	void draw();

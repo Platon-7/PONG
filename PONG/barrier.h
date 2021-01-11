@@ -14,8 +14,6 @@ public:
 	void update() override;
 	void draw() override;
 	void init() override;
-	void hit();
-	void selfDestruct();
 	float getBarrierPosY() { return pos_x; }
 	float getBarrierPosX() { return pos_y; }
 	Disk getCollisionHull() const override;

@@ -3,14 +3,17 @@
 #include "game.h"
 #include "barrier.h"
 #include "util.h"
+#include "ball.h"
 
 Barrier::Barrier(const Game& mygame)
 	: GameObject(mygame)
 {
+	init();
 }
 
 void Barrier::update()
 {
+	
 
 }
 
@@ -28,9 +31,12 @@ void Barrier::draw()
 
 }
 
+
 void Barrier::init()
 {
-
+	pos_x = (float)rangeRandom(250, 750);
+	pos_y = (float)rangeRandom(radius, CANVAS_HEIGHT - radius);
+	radius= rangeRandom(30, 100);
 }
 
 

@@ -4,6 +4,8 @@
 #include <vecmath.h>
 #include "ball.h"
 #include <math.h>
+#include "util.h"
+#include "barrier.h"
 
 
 
@@ -40,6 +42,28 @@ void Game::checkScore()
 			graphics::playSound(wav, 0.1f);
 		}
 	}
+}
+bool Game::checkForBarrier(float prev_ball_x,float prev_ball_y) {
+	if (!ball || !barrier) {
+		return false;
+	}
+	Disk d2 = ball->getCollisionHull();
+	Disk d3 = barrier->getCollisionHull();
+
+	float dx_prev = prev_ball_x - d3.cx;
+	float dy_prev = prev_ball_y - d3.cy;
+
+	float dx = d2.cx - d3.cx;
+	float dy = d2.cy - d3.cy;
+	if (sqrt(dx * dx + dy * dy) <= d2.radius + d3.radius) {
+		return true;
+	}
+	else if (sqrt(dx_prev * dx_prev + dy_prev * dy_prev) <= d2.radius + d3.radius) {
+		return true;
+	}
+	else
+		return false;
+
 }
 
 bool Game::checkCollision()
@@ -186,10 +210,15 @@ void Game::updatePlayingScreen() {
 
 
 	spawnBall();
+	float prev_ball_y = ball->getPosY();
+	float prev_ball_x = ball->getPosX();
 
 	if (ball) {
 		ball->update();
 	}
+	float curr_ball_y = ball->getPosY();
+	float curr_ball_x = ball->getPosX();
+
 	if (graphics::getGlobalTime() > x) {
 		if (!barrier_here) {
 			spawnBarrier();
@@ -199,10 +228,36 @@ void Game::updatePlayingScreen() {
 			barrier = nullptr;
 			barrier_here = false;
 		}
-		x = x + 20000;
+		x = x + rangeRandom(10000, 20000);
 	}
 	if (barrier)
 		barrier->update();
+
+	int N_tests = 5;
+	/*float dx = cur_x - prev_x;
+
+	float dy = cur_y - prev_y;
+
+	float len = dx * dx + dy * dy;
+
+	N_tests = (int)ceil(len / (barrier->radius * Pad_width));
+	*/
+	for (int i = 0; i < N_tests; i++)
+
+	{
+
+		float s = (i + 0.5f) / N_tests;
+
+		float x = s * (curr_ball_x - prev_ball_x) + prev_ball_x;
+
+		float y = s * (curr_ball_y - prev_ball_y) + prev_ball_y;
+
+		if (checkForBarrier(x, y))
+			ball->hitBarrier();
+	}
+	/*if (checkForBarrier()) {
+		ball->hitBarrier();
+	}*/
 	if (checkCollision()) {
 		ball->hit();
 	}
@@ -226,11 +281,15 @@ void Game::updateEndGame() {
 		victory_sound = false;
 	}
 	if (graphics::getKeyState(graphics::SCANCODE_RETURN)) {// edw thelw na ksanarxisei to paixnidi giayto mhdenizw ta score kai sbhnw paiktes, to mpalaki einai hdh sbhsmeno giati gia na ertho edo mphke pontos
+		delete player;
 		player = nullptr;
+		delete player2;
 		player2 = nullptr;
+		barrier = nullptr;
 		status = STATUS_PLAYING;
 		player_initialized = false;
 		player2_initialized = false;
+		barrier_here = false;
 		player1points = 0;
 		player2points = 0;
 		game_has_begun = true;

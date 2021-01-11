@@ -12,6 +12,10 @@
 
 void Ball::update()
 {
+	if (hits > x) {
+		ball_speed = ball_speed * 1.5f;
+		x = x + 10;
+	}
 
 
 	spinner_angle++;
@@ -58,87 +62,40 @@ void Ball::update()
 	ball_center_y += ball_direction_y * ball_speed;
 
 }
-void Ball::hit()
+void Ball::hitBarrier()
 {
-	spinner_angle++;
-	ball_future_center_x = ball_center_x + ball_direction_x * ball_speed;
-	ball_future_center_y = ball_center_y + ball_direction_y * ball_speed;
-	play_collision_sound = false;
 
-	if ((ball_future_center_x + ball_radius) >= canvas_width - 47.5) {
 	math::vec2 dir{ ball_direction_x, ball_direction_y };
 	math::vec2 normal = { -1.0f, 0.0f };
 	math::vec2 reflection = math::reflect(dir, normal);
 	ball_direction_x = reflection.x;
 	ball_direction_y = reflection.y;
 	play_collision_sound = true;
-	}
 
-	if ((ball_future_center_x - ball_radius) <= 47.5) {
-		math::vec2 dir{ ball_direction_x, ball_direction_y };
-		math::vec2 normal = { 1.0f, 0.0f };
-		math::vec2 reflection = math::reflect(dir, normal);
-		ball_direction_x = reflection.x;
-		ball_direction_y = reflection.y;
-		play_collision_sound = true;
-	}
-	if (play_collision_sound) {
-		std::string wav = std::string(ASSET_PATH) + "pong_hit_edited.wav";
-		graphics::playSound(wav, 0.5f);
-	}
-	ball_center_x += ball_direction_x * ball_speed;
-	ball_center_y += ball_direction_y * ball_speed;
 
-	/*math::vec2 dir{ ball_direction_x, ball_direction_y };
+
+}
+void Ball::hit()
+{
+
+
+	math::vec2 dir{ ball_direction_x, ball_direction_y };
 	math::vec2 normal = { -1.0f, 0.0f };
 	math::vec2 reflection = math::reflect(dir, normal);
 	ball_direction_x = reflection.x;
 	ball_direction_y = reflection.y;
 	play_collision_sound = true;
-	/*spinner_angle++;
-	ball_future_center_x = ball_center_x + ball_direction_x * ball_speed;
-	ball_future_center_y = ball_center_y + ball_direction_y * ball_speed;
-	play_collision_sound = false;
+	hits++;
+	ball_center_x += ball_direction_x * ball_speed;
+	ball_center_y += ball_direction_y * ball_speed; 
 
-	if ((ball_future_center_x + ball_radius) >= canvas_width) {
-		math::vec2 dir{ ball_direction_x, ball_direction_y };
-		math::vec2 normal = { -1.0f, 0.0f };
-		math::vec2 reflection = math::reflect(dir, normal);
-		ball_direction_x = reflection.x;
-		ball_direction_y = reflection.y;
-		play_collision_sound = true;
-	}
-
-	else if ((ball_future_center_x - ball_radius) <= 0.0f) {
-		math::vec2 dir{ ball_direction_x, ball_direction_y };
-		math::vec2 normal = { 1.0f, 0.0f };
-		math::vec2 reflection = math::reflect(dir, normal);
-		ball_direction_x = reflection.x;
-		ball_direction_y = reflection.y;
-		play_collision_sound = true;
-	}
-	if ((ball_future_center_y + ball_radius) >= canvas_height) {
-		math::vec2 dir{ ball_direction_x, ball_direction_y };
-		math::vec2 normal = { 0.0f, -1.0f };
-		math::vec2 reflection = math::reflect(dir, normal);
-		ball_direction_x = reflection.x;
-		ball_direction_y = reflection.y;
-		play_collision_sound = true;
-	}
-	else if ((ball_future_center_y - ball_radius) <= 0.0f) {
-		math::vec2 dir{ ball_direction_x, ball_direction_y };
-		math::vec2 normal = { 0.0f, 1.0f };
-		math::vec2 reflection = math::reflect(dir, normal);
-		ball_direction_x = reflection.x;
-		ball_direction_y = reflection.y;
-		play_collision_sound = true;
-	}
 	if (play_collision_sound) {
 		std::string wav = std::string(ASSET_PATH) + "pong_hit_edited.wav";
 		graphics::playSound(wav, 0.5f);
 	}
-	ball_center_x += ball_direction_x * ball_speed;
-	ball_center_y += ball_direction_y * ball_speed;*/
+
+
+
 }
 
 void Ball::drawBall()
@@ -156,6 +113,19 @@ void Ball::drawBall()
 
 
 }
+void Ball::drawSpinner() {
+
+	graphics::Brush br;
+	br.fill_color[0] = 1.0f;
+	br.fill_color[1] = 0.0f;
+	br.fill_color[2] = 0.0f;
+	br.fill_opacity = 1.0f;
+
+	graphics::setOrientation(spinner_angle);
+	//graphics::drawSector(90, 10, 2, 5, 0, 90, br);
+	graphics::setOrientation(0);
+}
+
 
 void Ball::init()
 {
@@ -167,6 +137,7 @@ void Ball::init()
 	float result = randOper(CANVAS_HEIGHT/2, value);
 	ball_center_x = CANVAS_WIDTH/2;
 	ball_center_y = result; ///bgainei apo to kentro kai paei eite pros ta aristera eite pros ta deksia
+	rangeRandom(ball_radius, CANVAS_HEIGHT - ball_radius);
 	while (u == 0) {
 		float local = randOper(0, 1);
 		ball_direction_x = local * rand0to1();
@@ -179,8 +150,6 @@ void Ball::init()
 		if (std::abs(ball_direction_y) - std::abs(ball_direction_x) <= 0.4) {
 			u++;
 		}
-
-		myball++;
 	}
 }
 void Ball::draw()

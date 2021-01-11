@@ -4,8 +4,8 @@
 #include "graphics.h"
 
 class Ball : public GameObject, public Collidable {
-
-	int myball = 0;
+	int x = 10;
+	int hits = 0;
 	graphics::Brush br;
 	bool active = true;
 
@@ -23,7 +23,7 @@ class Ball : public GameObject, public Collidable {
 	float ball_future_center_x;
 	bool play_collision_sound;
 
-	float ball_speed = 2.0f;
+	float ball_speed = 1.5f;
 
 	float spinner_angle = 0.0f;
 
@@ -32,7 +32,9 @@ public:
 	void draw() override;
 	void init() override;
 	void drawScore();
+	void drawSpinner();
 	void drawBall();
+	void hitBarrier();
 	void hit();
 	bool ballActive() {
 		return active;
