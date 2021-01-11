@@ -109,7 +109,6 @@ void Ball::draw()
 	br.fill_color[2] = 1.1f;
 	br.outline_opacity = 0.0f;
 	graphics::drawDisk(ball_center_x, ball_center_y, ball_radius, br);
-	//graphics::resetPose();
 
 }
 
