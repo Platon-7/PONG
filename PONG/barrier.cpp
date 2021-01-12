@@ -19,29 +19,32 @@ void Barrier::update()
 
 void Barrier::draw()
 {
-	br.fill_color[0] = 1.1f;
-	br.fill_color[1] = 1.1f;
-	br.fill_color[2] = 1.1f;
+	graphics::Brush br;
+	br.texture = "";
+	br.fill_color[0] = 1.0f;//zwgrafizw ton paikth
+	br.fill_color[1] = 1.0f;
+	br.fill_color[2] = 1.0f;
 	br.fill_opacity = 1.0f;
-	br.outline_opacity = 0.0f;
-	graphics::drawDisk(pos_x, pos_y, radius, br);
+	graphics::drawRect(pos_x, pos_y, width, height, br);
 
 }
 
 
 void Barrier::init()
 {
-	radius = rangeRandom(30, 100);
+	width = rangeRandom(30, 100);
+	height = rangeRandom(40, 150);
 	pos_x = (float)rangeRandom(250, 750);// pairnw tyxaia megethi kai tyxaies theseis gia thn mpala 
-	pos_y = (float)rangeRandom(radius, CANVAS_HEIGHT - radius);
+	pos_y = (float)rangeRandom(100, CANVAS_HEIGHT - 100);
 }
 
 
-Disk Barrier::getCollisionHull() const
+Rectangle Barrier::getCollisionRect() const
 {
-	Disk disk;
-	disk.cx = pos_x;
-	disk.cy = pos_y;
-	disk.radius = radius;
-	return disk;
+	Rectangle rect;
+	rect.rx = pos_x;
+	rect.ry = pos_y;
+	rect.rw = width;
+	rect.rh = height;
+	return rect;
 }

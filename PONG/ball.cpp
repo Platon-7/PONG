@@ -41,18 +41,47 @@ void Ball::update()
 	ball_center_y += ball_direction_y * ball_speed;
 
 }
-void Ball::hitBarrier()
+void Ball::hitBarrier(float barrier_x, float barrier_y,float barrier_width,float barrier_height)
 {
+	ball_future_center_x = ball_center_x + ball_direction_x * ball_speed;// me bash thn taxythta thn kateythinsh kai to x ths mpalas ypologizw thn epomenh thesh x
+	ball_future_center_y = ball_center_y + ball_direction_y * ball_speed;// me bash thn taxythta thn kateythinsh kai to y ths mpalas ypologizw thn epomenh thesh y
 
-	math::vec2 dir{ ball_direction_x, ball_direction_y };//gia na mpo edo shmainei oti synanthsa empodio ara kane reflect
-	math::vec2 normal = { -1.0f, 0.0f };
-	math::vec2 reflection = math::reflect(dir, normal);
-	ball_direction_x = reflection.x;
-	ball_direction_y = reflection.y;
-	play_collision_sound = true;
+	if ((ball_future_center_x + ball_radius) >= barrier_x - barrier_width/2 && ball_center_x<barrier_x) {
+		math::vec2 dir{ ball_direction_x, ball_direction_y };
+		math::vec2 normal = { -1.0f, 0.0f };
+		math::vec2 reflection = math::reflect(dir, normal);
+		ball_direction_x = reflection.x;
+		ball_direction_y = reflection.y;
+		play_collision_sound = true;
+	}
+	else if (ball_future_center_x - ball_radius <= barrier_x + barrier_width/2 && ball_center_x>barrier_x ){
+		math::vec2 dir{ ball_direction_x,ball_direction_y };
+		math::vec2 normal = { 1.0f, 0.0f };
+		math::vec2 reflection = math::reflect(dir, normal);
+		ball_direction_x = reflection.x;
+		ball_direction_y = reflection.y;
+		play_collision_sound = true;
+	}
 
-	ball_center_x += ball_direction_x * ball_speed;// enhmerwnw tis syntetagmenes
+	if (ball_future_center_y + ball_radius >= barrier_y +-barrier_height/2) {
+		math::vec2 dir{ ball_direction_x, ball_direction_y };
+		math::vec2 normal = { 0.0f, 1.0f };
+		math::vec2 reflection = math::reflect(dir, normal);
+		ball_direction_x = reflection.x;
+		ball_direction_y = reflection.y;
+		play_collision_sound = true;
+	}
+	else if ((ball_future_center_y - ball_radius) <= barrier_y+barrier_height/2) {
+		math::vec2 dir{ ball_direction_x, ball_direction_y };
+		math::vec2 normal = { 0.0f, -1.0f };
+		math::vec2 reflection = math::reflect(dir, normal);
+		ball_direction_x = reflection.x;
+		ball_direction_y = reflection.y;
+		play_collision_sound = true;
+	}
+	ball_center_x += ball_direction_x * ball_speed;// prosarmose analoga tis syntetagmenes ths mpalas
 	ball_center_y += ball_direction_y * ball_speed;
+
 
 }
 void Ball::hit()

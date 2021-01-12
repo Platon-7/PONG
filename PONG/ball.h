@@ -21,7 +21,7 @@ public:
 	void update() override;
 	void draw() override;
 	void init() override;
-	void hitBarrier();
+	void hitBarrier(float barrier_x, float barrier_y,float barrier_width, float barrier_height);
 	void hit();
 	float getPosY() { return ball_center_y; }
 	float getPosX() { return ball_center_x; }// moy epistrefoyn thn thesh ths mpalas me bash to teleytaio update poy egine

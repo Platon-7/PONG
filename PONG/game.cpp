@@ -40,22 +40,35 @@ bool Game::checkForBarrier(float prev_ball_x,float prev_ball_y) {//an yparxei ba
 	if (!ball || !barrier) {// toy dinw san orisma tis prohgoymenes theseis giati yparxei periptwsh na ginei collision kai na mhn to antilhfthei logw update, etsi gyrnaw stis prohgoymenes
 		return false;
 	}
+	Rectangle r3 = barrier->getCollisionRect();
 	Disk d2 = ball->getCollisionHull();
-	Disk d3 = barrier->getCollisionHull();
 
-	float dx_prev = prev_ball_x - d3.cx;
-	float dy_prev = prev_ball_y - d3.cy;
+	float testX = d2.cx;
+	float testY = d2.cy;
+	float rectangle_x= r3.rx - r3.rw / 2;
+	float rectangle_y = r3.ry - r3.rh / 2;
 
-	float dx = d2.cx - d3.cx;
-	float dy = d2.cy - d3.cy;
-	if (sqrt(dx * dx + dy * dy) <= d2.radius + d3.radius) {// elegxos gia twra
+
+	if (d2.cx < rectangle_x)
+		testX = rectangle_x; //if ball is left
+	else if (d2.cx > rectangle_x + r3.rw)
+		testX = rectangle_x + r3.rw; //if ball is right
+	if (d2.cy < rectangle_y)
+		testY = rectangle_y;//if ball is above
+	else if (d2.cy > rectangle_y + r3.rh)
+		testY = rectangle_y + r3.rh;// if ball is below
+
+	float distX = d2.cx - testX;
+	float distY = d2.cy - testY;
+	float distance = sqrt((distX * distX) + (distY * distY));
+
+
+	if (distance <= d2.radius)// elegxos gia ton aristero
 		return true;
-	}
-	else if (sqrt(dx_prev * dx_prev + dy_prev * dy_prev) <= d2.radius + d3.radius) {// elegxos gia thn prohgoymenh thesh
-		return true;
-	}
-	else
+	else {
 		return false;
+	}
+
 
 }
 
@@ -90,7 +103,7 @@ bool Game::checkCollision()
 
 	float testX2 = d1.cx;
 	float testY2 = d1.cy;
-	float rectangle_x_beta = r2.rx - r2.rw / 2;
+	float rectangle_x_beta = r2.rx + r2.rw / 2;//??????????????????????????????????????????????????????????????????????????????????????????????????????????
 	float rectangle_y_beta = r2.ry - r2.rh / 2;
 
 
@@ -202,7 +215,7 @@ void Game::updatePlayingScreen() {
 		float dy = curr_ball_y - prev_ball_y;
 
 		float len = dx * dx + dy * dy;
-		int N_tests = (int)ceil(len / barrier->getBarrierRadius() * barrier->getBarrierRadius());
+		int N_tests = (int)ceil(len / (barrier->getBarrierWidth() * barrier->getBarrierWidth()));
 		for (int i = 0; i < N_tests; i++)
 
 		{
@@ -213,7 +226,7 @@ void Game::updatePlayingScreen() {
 			float y = s * (curr_ball_y - prev_ball_y) + prev_ball_y;
 
 			if (checkForBarrier(x, y))
-				ball->hitBarrier();
+				ball->hitBarrier(barrier->getBarrierPosX(), barrier->getBarrierPosY(),barrier->getBarrierWidth(), barrier->getBarrierHeight());
 		}
 	}
 
