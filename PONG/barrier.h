@@ -13,8 +13,8 @@ public:
 	void update() override;
 	void draw() override;
 	void init() override;
-	float getBarrierPosY() { return pos_x; }
-	float getBarrierPosX() { return pos_y; }
+	float getBarrierPosY() { return pos_y; }
+	float getBarrierPosX() { return pos_x; }
 	float getBarrierWidth() { return width; }
 	float getBarrierHeight() { return height; }
 	Rectangle getCollisionRect() const override;

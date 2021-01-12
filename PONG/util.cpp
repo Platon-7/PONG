@@ -29,3 +29,13 @@ int rangeRandom(int min, int max) {// mia synarthsh poy ths dinw anw kai katw or
 	} while (x >= RAND_MAX - remainder);
 	return min + x % n;
 }
+
+float max(float a, float b)
+{
+	if (a >= b) {
+		return a;
+	}
+	else {
+		return b;
+	}
+}

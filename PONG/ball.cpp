@@ -43,10 +43,8 @@ void Ball::update()
 }
 void Ball::hitBarrier(float barrier_x, float barrier_y,float barrier_width,float barrier_height)
 {
-	ball_future_center_x = ball_center_x + ball_direction_x * ball_speed;// me bash thn taxythta thn kateythinsh kai to x ths mpalas ypologizw thn epomenh thesh x
-	ball_future_center_y = ball_center_y + ball_direction_y * ball_speed;// me bash thn taxythta thn kateythinsh kai to y ths mpalas ypologizw thn epomenh thesh y
 
-	if ((ball_future_center_x + ball_radius) >= barrier_x - barrier_width/2 && ball_center_x<barrier_x) {
+	if (ball_center_x - ball_radius<barrier_x - barrier_width/2) {// an to mpalaki xtypaei thn aristera pleyra toy rect
 		math::vec2 dir{ ball_direction_x, ball_direction_y };
 		math::vec2 normal = { -1.0f, 0.0f };
 		math::vec2 reflection = math::reflect(dir, normal);
@@ -54,7 +52,7 @@ void Ball::hitBarrier(float barrier_x, float barrier_y,float barrier_width,float
 		ball_direction_y = reflection.y;
 		play_collision_sound = true;
 	}
-	else if (ball_future_center_x - ball_radius <= barrier_x + barrier_width/2 && ball_center_x>barrier_x ){
+	else if (ball_center_x  + ball_radius>barrier_x + barrier_width/2){// an to mpalaki xtypaei thn deksia pleyra toy rect
 		math::vec2 dir{ ball_direction_x,ball_direction_y };
 		math::vec2 normal = { 1.0f, 0.0f };
 		math::vec2 reflection = math::reflect(dir, normal);
@@ -63,15 +61,7 @@ void Ball::hitBarrier(float barrier_x, float barrier_y,float barrier_width,float
 		play_collision_sound = true;
 	}
 
-	if (ball_future_center_y + ball_radius >= barrier_y +-barrier_height/2) {
-		math::vec2 dir{ ball_direction_x, ball_direction_y };
-		math::vec2 normal = { 0.0f, 1.0f };
-		math::vec2 reflection = math::reflect(dir, normal);
-		ball_direction_x = reflection.x;
-		ball_direction_y = reflection.y;
-		play_collision_sound = true;
-	}
-	else if ((ball_future_center_y - ball_radius) <= barrier_y+barrier_height/2) {
+	else if (ball_center_y-ball_radius<barrier_y- barrier_height/2) {// an to mpalaki xtypaei thn panw pleyra toy rect
 		math::vec2 dir{ ball_direction_x, ball_direction_y };
 		math::vec2 normal = { 0.0f, -1.0f };
 		math::vec2 reflection = math::reflect(dir, normal);
@@ -79,9 +69,14 @@ void Ball::hitBarrier(float barrier_x, float barrier_y,float barrier_width,float
 		ball_direction_y = reflection.y;
 		play_collision_sound = true;
 	}
-	ball_center_x += ball_direction_x * ball_speed;// prosarmose analoga tis syntetagmenes ths mpalas
-	ball_center_y += ball_direction_y * ball_speed;
-
+	else if (ball_center_y+ball_radius>barrier_y+barrier_height/2) {// an to mpalaki xtypaei thn katw pleyra toy rect
+		math::vec2 dir{ ball_direction_x, ball_direction_y };
+		math::vec2 normal = { 0.0f, 1.0f };
+		math::vec2 reflection = math::reflect(dir, normal);
+		ball_direction_x = reflection.x;
+		ball_direction_y = reflection.y;
+		play_collision_sound = true;
+	}
 
 }
 void Ball::hit()
@@ -112,8 +107,8 @@ void Ball::init()
 	ball_radius = 4.0f;
 	ball_speed = 1.5f;
 	int u = 0;
-	int min = 1;
-	int max = 499;
+	int min = 5;
+	int max = 495;
 	ball_center_x = CANVAS_WIDTH / 2;
 	ball_center_y = rangeRandom(min, max);// thelw h mpala na arxikopoieitai ston aksona X stathera alla na mporei na bgei apo opoiodhpote shmeio ston aksona Y
 

@@ -21,7 +21,7 @@ void Barrier::draw()
 {
 	graphics::Brush br;
 	br.texture = "";
-	br.fill_color[0] = 1.0f;//zwgrafizw ton paikth
+	br.fill_color[0] = 1.0f;
 	br.fill_color[1] = 1.0f;
 	br.fill_color[2] = 1.0f;
 	br.fill_opacity = 1.0f;
