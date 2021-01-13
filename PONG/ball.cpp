@@ -78,6 +78,7 @@ void Ball::hitBarrier(float barrier_x, float barrier_y,float barrier_width,float
 		play_collision_sound = true;
 	}
 
+
 }
 void Ball::hit()
 {

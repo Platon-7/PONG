@@ -307,13 +307,25 @@ void Game::drawStartScreen() {// draw to intro tou paixnidioy
 	graphics::drawRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_WIDTH, br);
 	br.texture = "";
 
+	char inst3[40];
+	sprintf_s(inst3, "PONG");
+	graphics::drawText(CANVAS_WIDTH / 2-40, CANVAS_HEIGHT / 2-165, 50 , inst3, br);
+	
+	char inst[40];
+	sprintf_s(inst, "USE W S FOR LEFT PLAYER");
+	graphics::drawText(CANVAS_WIDTH / 2 - 170, CANVAS_HEIGHT / 2 , 21, inst, br);
+
+	char inst2[40];
+	sprintf_s(inst2, "USE ARROWS FOR RIGHT PLAYER");
+	graphics::drawText(CANVAS_WIDTH / 2+20, CANVAS_HEIGHT / 2, 21, inst2, br);
+
 	char output[40];
 	sprintf_s(output, "Press ENTER to start: ");
-	graphics::drawText(CANVAS_WIDTH / 2-100, CANVAS_HEIGHT / 2-125, 30, output, br);
+	graphics::drawText(CANVAS_WIDTH / 2-100, CANVAS_HEIGHT / 2-100, 30, output, br);
 
 	char output2[40];
 	sprintf_s(output2, "Press ESCAPE to exit: ");
-	graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 75, 30, output2, br);
+	graphics::drawText(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 50, 30, output2, br);
 
 
 }
