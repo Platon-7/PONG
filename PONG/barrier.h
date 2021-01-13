@@ -13,6 +13,7 @@ public:
 	void update() override;
 	void draw() override;
 	void init() override;
+	void fixxxer(float a, float b);
 	float getBarrierPosY() { return pos_y; }
 	float getBarrierPosX() { return pos_x; }
 	float getBarrierWidth() { return width; }

@@ -104,7 +104,7 @@ bool Game::checkCollision()
 
 	float testX2 = d1.cx;
 	float testY2 = d1.cy;
-	float rectangle_x_beta = r2.rx - r2.rw / 2;//??????????????????????????????????????????????????????????????????????????????????????????????????????????
+	float rectangle_x_beta = r2.rx - r2.rw / 2;
 	float rectangle_y_beta = r2.ry - r2.rh / 2;
 
 
@@ -209,6 +209,8 @@ void Game::updatePlayingScreen() {
 		}
 		x = x + rangeRandom(10000, 20000);// megalwse to x
 	}
+	if (barrier)
+		barrier->fixxxer(ball->getPosX(), ball->getPosY());
 
 	if (barrier) {// an yparxei barrier ypologise me bash to radius tou posous elegxous prepei na kaneis gia tis prohgoymenes theseis
 		barrier->update();
@@ -265,8 +267,10 @@ void Game::updateEndGame() {
 		player = nullptr;
 		delete player2;
 		player2 = nullptr;
-		delete barrier;
-		barrier = nullptr;
+		if (barrier) {
+			delete barrier;
+			barrier = nullptr;
+		}
 
 		status = STATUS_PLAYING;
 		player_initialized = false;
@@ -318,7 +322,6 @@ void Game::drawPlayingScreen() {
 	br.texture = std::string(ASSET_PATH) + "pong_background.png";
 
 	//draw background
-
 	graphics::drawRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_WIDTH, br);
 		//bazw ksana CANVAS_WIDTH sto 4o orisma gia na mhn prosarmozw thn eikona sta thelw moy alla na thn afhnw, akoma kai na ksefigei apo th xwrhtikothta toy tamplo, an thelo na to prosarmosw bazw CANVAS_HEIGHT
 

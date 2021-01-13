@@ -1,7 +1,6 @@
 #include "graphics.h"
 #include "game.h"
 #include "config.h"
-#include "vecmath.h"
 
 
 void update(float ms)
